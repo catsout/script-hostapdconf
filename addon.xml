@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.hostapdconf" name="hostapd config" version="0.0.1" provider-name="me">
+	<requires>
+		<import addon="xbmc.python" version="2.25.0"/>
+	</requires>
+	<extension point="xbmc.python.script" library="default.py">
+		<provides>executable</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">configure hostapd with kodi</summary>
+		<description lang="en_GB">A gui addon that manage hostapd conf. The hostpad package is needed, and you may need to manually build it</description>
+		<language></language>
+		<platform>all</platform>
+	</extension>
+</addon>
