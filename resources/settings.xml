@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="32100">
+        <setting id="ssid" type="text" label="32101" default="kodi" />
+        <setting id="wpa_passphrase" type="text" label="32102" default="11111111" />
+		<setting id="mode" type="enum" label="32103" values="2.4G|5G|2.4G 5G" default="0" />
+		<setting id="channel" type="number" label="32104" default="1" />
+		<setting id="wmm" type="bool" label="32105" default="1" />
+    </category>
+    <category label="32200">
+        <setting id="country_code" type="text" label="32201" default="CN" />
+		<setting id="ieee80211n" type="bool" label="32202" default="1" />
+		<setting id="addition_conf_file" type="text" label="32203" default="/storage/.config/hostapd/addition.conf" />
+    </category>
+</settings>

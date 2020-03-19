@@ -25,16 +25,37 @@ class GUI(xbmcgui.WindowXMLDialog):
         # give kodi a bit of (processing) time to add all items to the container
         xbmc.sleep(100)
         # this puts the focus on the top item of the container
-        self.setFocusId(self.getCurrentContainerId())
-    def onClick(self):
-        self.main.open_settings()
+        self.setFocusId(121)
+
+    def onClick(self,controlId):
+        if controlId == 122:
+            self.main.open_settings()
 
 
 class main():
+    config = {
+        "interface":"wlan0",
+        "bridge":"-disable",
+        "hw_mode":"n",
+        "channel":1,
+        "country_code":"CN",
+        "ieee80211n":1,
+        "wmm_enabled":1,
+        "ssid":"kodi",
+        "wpa_passphrase":"11111111"
+    }
+    other_config = {
+        "ieee80211ac":0,
+        "wpa":2,
+        "wpa_key_mgmt":"WPA-PSK",
+        "rsn_pairwise":"CCMP"
+    }
     def __init__(self,*arg,**kwargs):
         self.ADDON = kwargs["ADDON"]
     def open_settings(self):
         self.ADDON.openSettings()
+    def restart_hostapd(self):
+        pass
 
 # this is the entry point of your addon, execution of your script will start here
 if (__name__ == '__main__'):
