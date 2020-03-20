@@ -5,11 +5,13 @@
         <setting id="wpa_passphrase" type="text" label="32102" default="11111111" />
 		<setting id="mode" type="enum" label="32103" values="2.4G|5G|2.4G 5G" default="0" />
 		<setting id="channel" type="number" label="32104" default="1" />
-		<setting id="wmm" type="bool" label="32105" default="1" />
+		<setting id="wmm" type="bool" label="32105" default="true" />
     </category>
     <category label="32200">
-        <setting id="country_code" type="text" label="32201" default="CN" />
-		<setting id="ieee80211n" type="bool" label="32202" default="1" />
-		<setting id="addition_conf_file" type="text" label="32203" default="/storage/.config/hostapd/addition.conf" />
+		<setting id="interface" type="text" label="32201" default="wlan0" />
+		<setting id="bridge" type="text" label="32202" default="None" />
+        <setting id="country_code" type="text" label="32203" default="CN" />
+		<setting id="ieee80211n" type="bool" label="32204" default="true" />
+		<setting id="addition_conf_file" type="text" label="32205" default="/storage/.config/hostapd/addition.conf" />
     </category>
 </settings>

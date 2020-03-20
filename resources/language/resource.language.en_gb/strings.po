@@ -21,7 +21,7 @@ msgctxt "#32002"
 msgid "setting"
 msgstr ""
 
-msgctxt "#32002"
+msgctxt "#32003"
 msgid "None"
 msgstr ""
 
@@ -50,24 +50,27 @@ msgid "wmm"
 msgstr ""
 
 msgctxt "#32200"
-msgid "advanced"
+msgid "Advanced"
 msgstr ""
 
 msgctxt "#32201"
-msgid "country_code"
+msgid "interface"
 msgstr ""
 
 msgctxt "#32202"
-msgid "ieee80211n"
+msgid "bridge"
 msgstr ""
 
 msgctxt "#32203"
-msgid "addition_conf_file"
+msgid "country_code"
 msgstr ""
 
 msgctxt "#32204"
 msgid "ieee80211n"
 msgstr ""
 
+msgctxt "#32205"
+msgid "addition_conf_file"
+msgstr ""
 
 

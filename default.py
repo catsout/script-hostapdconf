@@ -29,22 +29,24 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def onClick(self,controlId):
         if controlId == 122:
+            self.main.read_settings()
             self.main.open_settings()
 
 
 class main():
-    config = {
-        "interface":"wlan0",
-        "bridge":"-disable",
-        "hw_mode":"n",
-        "channel":1,
-        "country_code":"CN",
-        "ieee80211n":1,
-        "wmm_enabled":1,
-        "ssid":"kodi",
-        "wpa_passphrase":"11111111"
-    }
-    other_config = {
+    kodi_settings = [ 
+        ["interface","wlan0","text"],
+        ["bridge",None,"text"],
+        #2.4g,5g,2.4g 5g
+        ["mode",0,"int"],
+        ["channel",1,"int"],
+        ["country_code","CN","text"],
+        ["ieee80211n",1,"bool"],
+        ["wmm",1,"bool"],
+        ["ssid","kodi","text"],
+        ["wpa_passphrase","11111111","text"]
+    ] 
+    conf = {
         "ieee80211ac":0,
         "wpa":2,
         "wpa_key_mgmt":"WPA-PSK",
@@ -56,6 +58,36 @@ class main():
         self.ADDON.openSettings()
     def restart_hostapd(self):
         pass
+    def read_settings(self):
+        def get_setting(conf):
+            if conf[2] == "text":
+                return self.ADDON.getSetting(conf[0])
+            elif conf[2] == "int":
+                return self.ADDON.getSettingInt(conf[0])
+            elif conf[2] == "bool":
+                return self.ADDON.getSettingBool(conf[0])
+
+        for c in self.kodi_settings:
+            setting = get_setting(c)
+            if c[0] == "mode":
+                mode = ["g","a"]
+                self.conf["hw_mode"] = mode[setting]
+                if setting == 1:
+                    self.conf["ieee80211ac"] = 1
+            elif c[0] == "wmm":
+                self.conf["wmm_enable"] = setting
+            elif c[0] == "channel" and self.conf["hw_mode"] == 1 and setting < 20:
+                self.conf[c[0]] = 44   
+            elif setting != "None":
+                if c[2] == "bool":
+                    self.conf[c[0]] = int(setting)
+                else:
+                    self.conf[c[0]] = setting
+        with open("/home/out/1.log",mode="w+") as f:
+            t = ""
+            for k,v in self.conf.items():
+                t = t + k + ":" +str(v) + '\n'
+            f.write(t)
 
 # this is the entry point of your addon, execution of your script will start here
 if (__name__ == '__main__'):
