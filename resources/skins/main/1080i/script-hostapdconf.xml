@@ -31,17 +31,11 @@
 				<orientation>horizontal</orientation>
 				<align>center</align>
 				<control type="textbox" id=111>
-					<width>300</width>
-					<height>300</height>
-					<label>nihao</label>
+					<width>800</width>
+					<height>400</height>
+					<label></label>
 					<aligny>center</aligny>
 					<align>right</align>
-				</control>
-				<control type="textbox" id=112>
-					<width>300</width>
-					<height>300</height>
-					<label>nihao</label>
-					<aligny>center</aligny>
 				</control>
 			</control>
 			<control type="grouplist" id=120>

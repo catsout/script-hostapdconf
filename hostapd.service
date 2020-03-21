@@ -1,0 +1,17 @@
+[Unit]
+Description=Connection service
+DefaultDependencies=false
+Conflicts=shutdown.target
+After=dhclient.service
+Wants=network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+ExecStart=/bin/hostapd /storage/.config/hostapd/hostapd.conf
+StandardOutput=null
+RestartSec=2
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target

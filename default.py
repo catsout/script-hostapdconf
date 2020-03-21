@@ -3,6 +3,9 @@
 import xbmc
 import xbmcgui
 import xbmcaddon
+import subprocess
+import os
+import shutil
 
 # create a class for your addon, we need this to get info about your addon
 ADDON = xbmcaddon.Addon()
@@ -19,6 +22,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     # until now we have a blank window, the onInit function will parse your xml file
     def onInit(self):
+        self.main.check_hostapd()
         # select a view mode, '50' in our case, as defined in the skin file
         xbmc.executebuiltin('Container.SetViewMode(50)')
         # define a temporary list where we are going to add all the listitems to
@@ -28,9 +32,15 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setFocusId(121)
 
     def onClick(self,controlId):
-        if controlId == 122:
+        if controlId == 121:
             self.main.read_settings()
+            self.main.write_to_conf_file()
+            self.main.restart_hostapd()
+
+        if controlId == 122:
             self.main.open_settings()
+            self.main.read_settings()
+            self.main.write_to_conf_file()
 
 
 class main():
@@ -44,7 +54,8 @@ class main():
         ["ieee80211n",1,"bool"],
         ["wmm",1,"bool"],
         ["ssid","kodi","text"],
-        ["wpa_passphrase","11111111","text"]
+        ["wpa_passphrase","11111111","text"],
+        ["addition_conf_file","/storage/.config/hostapd/addition.conf","text"]
     ] 
     conf = {
         "ieee80211ac":0,
@@ -52,12 +63,23 @@ class main():
         "wpa_key_mgmt":"WPA-PSK",
         "rsn_pairwise":"CCMP"
     }
+    conf_file = "/storage/.config/hostapd/hostapd.conf"
     def __init__(self,*arg,**kwargs):
         self.ADDON = kwargs["ADDON"]
+    def check_hostapd(self):
+        if not os.path.exists("/sbin/hostapd"):
+            pass
+        if not os.path.exists("/storage/.config/hostapd"):
+            os.mkdir("/storage/.config/hostapd")
+        if not os.path.exists("/storage/.config/system.d/hostapd.service"):
+            shutil.copy(CWD+"/hostapd.service","/storage/.config/system.d/hostapd.service")
+            subprocess.run("systemctl daemon-reload",shell=True)
+
+
     def open_settings(self):
         self.ADDON.openSettings()
     def restart_hostapd(self):
-        pass
+        subprocess.Popen("systemctl restart hostapd.service",shell=True)
     def read_settings(self):
         def get_setting(conf):
             if conf[2] == "text":
@@ -83,11 +105,20 @@ class main():
                     self.conf[c[0]] = int(setting)
                 else:
                     self.conf[c[0]] = setting
-        with open("/home/out/1.log",mode="w+") as f:
-            t = ""
-            for k,v in self.conf.items():
-                t = t + k + ":" +str(v) + '\n'
-            f.write(t)
+    def write_to_conf_file(self):
+        conf_text = ""
+        addition_conf_file = ""
+        for k,v in self.conf.items():
+            if k == "addition_conf_file":
+                addition_conf_file = v
+                continue
+            conf_text = conf_text + k + "=" +str(v) + '\n'
+        if os.path.exists(addition_conf_file):
+            with open(addition_conf_file,mode="r") as add_f:
+                conf_text = "\n" + add_f.read()
+        with open(self.conf_file,mode="w+") as conf_f:
+            conf_f.write(conf_text)
+            
 
 # this is the entry point of your addon, execution of your script will start here
 if (__name__ == '__main__'):
