@@ -23,6 +23,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     # until now we have a blank window, the onInit function will parse your xml file
     def onInit(self):
         self.main.check_hostapd()
+        tb = self.getControl(111)
+        tb.setText(self.main.get_info())
         # select a view mode, '50' in our case, as defined in the skin file
         xbmc.executebuiltin('Container.SetViewMode(50)')
         # define a temporary list where we are going to add all the listitems to
@@ -73,13 +75,32 @@ class main():
             os.mkdir("/storage/.config/hostapd")
         if not os.path.exists("/storage/.config/system.d/hostapd.service"):
             shutil.copy(CWD+"/hostapd.service","/storage/.config/system.d/hostapd.service")
-            subprocess.run("systemctl daemon-reload",shell=True)
+            subprocess.Popen("systemctl daemon-reload",shell=True)
 
 
     def open_settings(self):
         self.ADDON.openSettings()
+    def get_info(self):
+        def id_to_str(str_id):
+            return self.ADDON.getLocalizedString(str_id[1])
+        self.read_settings()
+        str_ids = [
+            ["ssid",32101],
+            ["wpa_passphrase",32102],
+            ["hw_mode",32103],
+            ["channel",32104]
+        ]
+        info = ""
+        for str_id in str_ids:
+            value = str(self.conf[str_id[0]])
+            if str_id[0] == "hw_mode":
+                mode = {"g":"2.4G","a":"5G"}
+                value = mode[value]
+            info = info + id_to_str(str_id) +':'+ value +'\n'
+        return info
+
     def restart_hostapd(self):
-        subprocess.Popen("systemctl restart hostapd.service",shell=True)
+        subprocess.Popen(["systemctl","restart","hostapd.service"])
     def read_settings(self):
         def get_setting(conf):
             if conf[2] == "text":
@@ -97,10 +118,10 @@ class main():
                 if setting == 1:
                     self.conf["ieee80211ac"] = 1
             elif c[0] == "wmm":
-                self.conf["wmm_enable"] = setting
+                self.conf["wmm_enabled"] = setting
             elif c[0] == "channel" and self.conf["hw_mode"] == 1 and setting < 20:
                 self.conf[c[0]] = 44   
-            elif setting != "None":
+            elif setting != "":
                 if c[2] == "bool":
                     self.conf[c[0]] = int(setting)
                 else:

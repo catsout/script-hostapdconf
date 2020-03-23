@@ -1,9 +1,7 @@
 [Unit]
 Description=Connection service
 DefaultDependencies=false
-Conflicts=shutdown.target
-After=dhclient.service
-Wants=network.target
+After=network-online.target
 
 [Service]
 Type=simple

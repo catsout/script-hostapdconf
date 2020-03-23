@@ -9,7 +9,7 @@
     </category>
     <category label="32200">
 		<setting id="interface" type="text" label="32201" default="wlan0" />
-		<setting id="bridge" type="text" label="32202" default="None" />
+		<setting id="bridge" type="text" label="32202" default="" />
         <setting id="country_code" type="text" label="32203" default="CN" />
 		<setting id="ieee80211n" type="bool" label="32204" default="true" />
 		<setting id="addition_conf_file" type="text" label="32205" default="/storage/.config/hostapd/addition.conf" />

@@ -35,7 +35,7 @@
 					<height>400</height>
 					<label></label>
 					<aligny>center</aligny>
-					<align>right</align>
+					<align>center</align>
 				</control>
 			</control>
 			<control type="grouplist" id=120>
