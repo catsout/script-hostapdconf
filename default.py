@@ -23,8 +23,11 @@ class GUI(xbmcgui.WindowXMLDialog):
     # until now we have a blank window, the onInit function will parse your xml file
     def onInit(self):
         self.main.check_hostapd()
-        tb = self.getControl(111)
-        tb.setText(self.main.get_info())
+        self.main.read_settings()
+        self.main.write_to_conf_file()
+
+        self.tb = self.getControl(111)
+        self.tb.setText(self.main.get_info())
         # select a view mode, '50' in our case, as defined in the skin file
         xbmc.executebuiltin('Container.SetViewMode(50)')
         # define a temporary list where we are going to add all the listitems to
@@ -37,12 +40,12 @@ class GUI(xbmcgui.WindowXMLDialog):
         if controlId == 121:
             self.main.read_settings()
             self.main.write_to_conf_file()
+            self.tb.setText(self.main.ADDON.getLocalizedString(32004))
             self.main.restart_hostapd()
+            self.tb.setText(self.main.get_info())
 
         if controlId == 122:
             self.main.open_settings()
-            self.main.read_settings()
-            self.main.write_to_conf_file()
 
 
 class main():
@@ -82,7 +85,12 @@ class main():
         self.ADDON.openSettings()
     def get_info(self):
         def id_to_str(str_id):
-            return self.ADDON.getLocalizedString(str_id[1])
+            return self.ADDON.getLocalizedString(str_id)
+       
+        popen = subprocess.Popen(["systemctl","is-active","hostapd.service"],universal_newlines=True,stdout=subprocess.PIPE)
+        if popen.communicate()[0] != 'active\n':
+            return id_to_str(32005)
+
         self.read_settings()
         str_ids = [
             ["ssid",32101],
@@ -96,11 +104,14 @@ class main():
             if str_id[0] == "hw_mode":
                 mode = {"g":"2.4G","a":"5G"}
                 value = mode[value]
-            info = info + id_to_str(str_id) +':'+ value +'\n'
+            info = info + id_to_str(str_id[1]) +':'+ value +'\n'
         return info
 
     def restart_hostapd(self):
-        subprocess.Popen(["systemctl","restart","hostapd.service"])
+        popen = subprocess.Popen(["systemctl","restart","hostapd.service"])
+        popen.wait()
+        return popen.poll()
+        
     def read_settings(self):
         def get_setting(conf):
             if conf[2] == "text":

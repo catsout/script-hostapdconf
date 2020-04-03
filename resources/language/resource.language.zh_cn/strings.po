@@ -14,16 +14,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "#32001"
-msgid "restart"
+msgid "Restart"
 msgstr "重启"
 
 msgctxt "#32002"
-msgid "setting"
+msgid "Setting"
 msgstr "设置"
 
 msgctxt "#32003"
 msgid "None"
 msgstr "无"
+
+msgctxt "#32004"
+msgid "Restarting"
+msgstr "正在重启"
+
+msgctxt "#32005"
+msgid "Starting faild"
+msgstr "启动失败"
 
 msgctxt "#32100"
 msgid "Basic"
