@@ -100,11 +100,11 @@ class main():
         ]
         info = ""
         for str_id in str_ids:
-            value = str(self.conf[str_id[0]])
+            value = self.conf[str_id[0]]
             if str_id[0] == "hw_mode":
                 mode = {"g":"2.4G","a":"5G"}
                 value = mode[value]
-            info = info + id_to_str(str_id[1]) +':'+ value +'\n'
+            info = info + id_to_str(str_id[1]) +':'+ str(value).decode('utf-8') +'\n'
         return info
 
     def restart_hostapd(self):
@@ -144,10 +144,10 @@ class main():
             if k == "addition_conf_file":
                 addition_conf_file = v
                 continue
-            conf_text = conf_text + k + "=" +str(v) + '\n'
+            conf_text +=  k + "=" + str(v) + '\n'
         if os.path.exists(addition_conf_file):
             with open(addition_conf_file,mode="r") as add_f:
-                conf_text = "\n" + add_f.read()
+                conf_text += "\n" + add_f.read()
         with open(self.conf_file,mode="w+") as conf_f:
             conf_f.write(conf_text)
             
