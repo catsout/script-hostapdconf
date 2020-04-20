@@ -22,7 +22,6 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     # until now we have a blank window, the onInit function will parse your xml file
     def onInit(self):
-        self.main.check_hostapd()
         self.main.read_settings()
         self.main.write_to_conf_file()
 
@@ -71,15 +70,6 @@ class main():
     conf_file = "/storage/.config/hostapd/hostapd.conf"
     def __init__(self,*arg,**kwargs):
         self.ADDON = kwargs["ADDON"]
-    def check_hostapd(self):
-        if not os.path.exists("/sbin/hostapd"):
-            pass
-        if not os.path.exists("/storage/.config/hostapd"):
-            os.mkdir("/storage/.config/hostapd")
-        if not os.path.exists("/storage/.config/system.d/hostapd.service"):
-            shutil.copy(CWD+"/hostapd.service","/storage/.config/system.d/hostapd.service")
-            subprocess.Popen("systemctl daemon-reload",shell=True)
-
 
     def open_settings(self):
         self.ADDON.openSettings()
