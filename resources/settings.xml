@@ -3,7 +3,7 @@
     <category label="32100">
         <setting id="ssid" type="text" label="32101" default="kodi" />
         <setting id="wpa_passphrase" type="text" label="32102" default="11111111" />
-		<setting id="mode" type="enum" label="32103" values="2.4G|5G|2.4G 5G" default="0" />
+		<setting id="mode" type="enum" label="32103" values="2.4G|5G" default="0" />
 		<setting id="channel" type="number" label="32104" default="1" />
 		<setting id="wmm" type="bool" label="32105" default="true" />
     </category>
